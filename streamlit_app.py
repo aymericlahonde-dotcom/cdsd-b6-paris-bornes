@@ -16,6 +16,7 @@ from streamlit_additions import (
     render_tab_classement,
     render_tab_energie,
 )
+from monitoring import log_visit, render_tab_monitoring
 
 # set_page_config DOIT être le premier appel Streamlit
 st.set_page_config(
@@ -33,6 +34,9 @@ if not os.path.exists(os.path.join(BASE_DIR, "bornes.db")):
     # Aucun secret / aucune authentification requis.
     import build_data
     build_data.main()
+
+# Monitoring léger : journalise la visite (1 fois par session, sans donnée perso)
+log_visit()
 
 
 @st.cache_data(ttl=300)
@@ -190,14 +194,15 @@ with k3:
 with k4:
     st.metric("Puissance moyenne", f"{puissance_moy:.0f} kW" if pd.notna(puissance_moy) else "N/A")
 
-tab_carte, tab_pression, tab_energie, tab_population, tab_proj, tab_top, tab_ene2 = st.tabs([
+tab_carte, tab_pression, tab_energie, tab_population, tab_proj, tab_top, tab_ene2, tab_monitoring = st.tabs([
     "Répartition des bornes",
     "Pression sur les équipements",
     "Consommation électrique",
     "Données démographiques",
     "Projection déficitaire",
     "Evolution déficit",
-    "Soutenabilité réseau"
+    "Soutenabilité réseau",
+    "Suivi & monitoring"
 ])
  
  
@@ -570,8 +575,11 @@ with tab_top:
         render_tab_classement(arr_selectionnes)
 
 with tab_ene2:
-        
+
         render_tab_energie(geojson)
+
+with tab_monitoring:
+        render_tab_monitoring(bornes)
     
 
 

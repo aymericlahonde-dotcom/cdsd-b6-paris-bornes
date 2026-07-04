@@ -36,6 +36,13 @@ Le dashboard répond à trois questions :
 - **Projections** du déficit de bornes par scénario × horizon.
 - **Classement** des arrondissements les plus sous-équipés.
 - **Volet énergie** : impact de la recharge sur la consommation électrique locale.
+- **Suivi & monitoring** : qualité/fraîcheur des données, résultats du modèle (15 exécutions scénario × horizon) et usage anonyme.
+
+## 🔒 RGPD
+
+**Aucune donnée personnelle** n'est traitée : toutes les sources sont ouvertes et agrégées à la
+maille arrondissement. Pas de cookie, pas d'authentification, pas d'IP. Le compteur d'usage de la
+page monitoring est un horodatage serveur anonyme → hors champ RGPD (art. 4).
 
 ## 📊 Données — 100 % sources publiques
 
@@ -56,6 +63,7 @@ build_data.py        → génère bornes.db depuis l'OpenData public
 bornes.db            → base SQLite embarquée (bornes + pression + population + énergie + VE)
 streamlit_app.py     → dashboard (carte, filtres, indicateurs)
 streamlit_additions.py → onglets projection / classement / énergie
+monitoring.py        → onglet suivi (qualité données, résultats modèle, usage) + journal anonyme
 data/                → CSV d'analyse (projections, scénarios, pression)
 Dockerfile           → image de déploiement (Hugging Face Spaces)
 ```
